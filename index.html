@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CANAL COM TV - Média d'information béninoise</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        :root {
+            --blanc: #ffffff;
+            --fuchsia: #FF00FF; /* Fuchsia pur */
+            --noir: #0a0a0a;
+            --gris-clair: #f8f8f8;
+            --gris: #e5e5e5;
+            --gris-fonce: #2d2d2d;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        body {
+            background-color: var(--blanc);
+            color: var(--noir);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 255, 0); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === HEADER === */
+        header {
+            background: var(--blanc);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 0.8rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            cursor: pointer;
+        }
+        .logo span:nth-child(1) {
+            color: var(--noir);
+        }
+        .logo span:nth-child(2) {
+            color: var(--fuchsia);
+            font-weight: 800;
+        }
+        .logo span:nth-child(3) {
+            color: var(--noir);
+            font-weight: 300;
+        }
+
+        .live-badge {
+            background: var(--fuchsia);
+            color: var(--blanc);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+        .live-badge i {
+            font-size: 0.8rem;
+        }
+
+        /* Menu principal */
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--gris);
+            margin-top: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+        }
+        .nav-menu li a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.3rem 0;
+            cursor: pointer;
+        }
+        .nav-menu li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--fuchsia);
+            transition: width 0.3s;
+        }
+        .nav-menu li a:hover {
+            color: var(--fuchsia);
+        }
+        .nav-menu li a:hover::after {
+            width: 100%;
+        }
+        .nav-menu li a.active {
+            color: var(--fuchsia);
+        }
+        .nav-menu li a.active::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .search-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .search-icon:hover {
+            color: var(--fuchsia);
+            transform: scale(1.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Menu géopolitique */
+        .geo-nav {
+            background: var(--gris-clair);
+            padding: 1rem 5%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            border-bottom: 1px solid var(--gris);
+        }
+        .geo-nav a {
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+        }
+        .geo-nav a:hover {
+            color: var(--fuchsia);
+            transform: translateY(-2px);
+        }
+        .geo-nav a.active {
+            color: var(--fuchsia);
+            font-weight: 600;
+        }
+
+        /* === HERO LIVE (fixe) === */
+        .hero-live {
+            background: linear-gradient(135deg, var(--noir) 0%, #1a1a1a 100%);
+            color: var(--blanc);
+            padding: 3rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-live::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 255, 0.1));
+            clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+        .live-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        .live-player {
+            flex: 2;
+            min-width: 300px;
+        }
+        .live-player iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 2px solid var(--fuchsia);
+        }
+        .live-info {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .live-info h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .live-info h2 span {
+            color: var(--fuchsia);
+            position: relative;
+            display: inline-block;
+            animation: float 6s ease-in-out infinite;
+        }
+        .live-info p {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        .live-now {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            width: fit-content;
+            border: 1px solid var(--fuchsia);
+        }
+        .live-dot {
+            width: 12px;
+            height: 12px;
+            background: #ff4d4d;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* === CONTENU DYNAMIQUE === */
+        #dynamic-content {
+            min-height: 60vh;
+        }
+
+        /* Sections communes */
+        section {
+            padding: 4rem 5%;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
+            padding-left: 1rem;
+            border-left: 4px solid var(--fuchsia);
+        }
+        .section-link {
+            color: var(--fuchsia);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: var(--transition);
+        }
+        .section-link:hover {
+            gap: 0.8rem;
+        }
+
+        /* Cartes */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: var(--blanc);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: var(--transition);
+            border: 1px solid var(--gris);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 0, 255, 0.1);
+            border-color: var(--fuchsia);
+        }
+        .card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .card-category {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--fuchsia);
+            color: var(--blanc);
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .card-date {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+        .card-excerpt {
+            color: #555;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Grille thématique (pour Culture, etc.) */
+        .thematic-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        .thematic-card {
+            background: var(--gris-clair);
+            border-radius: 12px;
+            padding: 2rem 1rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .thematic-card:hover {
+            background: var(--fuchsia);
+            color: var(--blanc);
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 0, 255, 0.3);
+        }
+        .thematic-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .thematic-card span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Sport grid */
+        .sport-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        .sport-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            height: 250px;
+            cursor: pointer;
+        }
+        .sport-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+        .sport-card:hover img {
+            transform: scale(1.1);
+        }
+        .sport-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: white;
+        }
+        .sport-overlay h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Émissions grid */
+        .emissions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        .emission-card {
+            display: flex;
+            gap: 1rem;
+            background: var(--gris-clair);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: var(--transition);
+            align-items: center;
+        }
+        .emission-card:hover {
+            background: var(--fuchsia);
+            color: var(--blanc);
+            transform: translateX(5px);
+        }
+        .emission-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: var(--fuchsia);
+        }
+        .emission-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .emission-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--noir);
+            color: var(--blanc);
+            padding: 4rem 5% 2rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .footer-col h4 {
+            color: var(--fuchsia);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+        .footer-col ul li a {
+            transition: var(--transition);
+            opacity: 0.8;
+            cursor: pointer;
+        }
+        .footer-col ul li a:hover {
+            color: var(--fuchsia);
+            opacity: 1;
+            padding-left: 5px;
+        }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .social-links a {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            background: #2d2d2d;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .social-links a:hover {
+            background: var(--fuchsia);
+            transform: translateY(-3px);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #2d2d2d;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .thematic-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .sport-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .emissions-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--blanc);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            .nav-menu.active {
+                display: flex;
+            }
+            .nav-right {
+                margin-left: auto;
+            }
+            .geo-nav {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+            .thematic-grid {
+                grid-template-columns: 1fr;
+            }
+            .sport-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <div class="logo" data-page="accueil">
+                 <img src="images/cctv.jpg" alt="CANAL COM TV" style="height: 40px; width: auto; cursor: pointer;">
+            </div>
+            <div class="live-badge" data-page="direct">
+                <i class="fas fa-circle"></i> EN DIRECT
+            </div>
+        </div>
+        <div class="main-nav">
+            <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+            <ul class="nav-menu">
+                <li><a class="menu-link active" data-page="accueil">Accueil</a></li>
+                <li><a class="menu-link" data-page="actualites">Actualités</a></li>
+                <li><a class="menu-link" data-page="culture">Culture</a></li>
+                <li><a class="menu-link" data-page="sport">Sport</a></li>
+                <li><a class="menu-link" data-page="emissions">Émissions</a></li>
+                <li><a class="menu-link" data-page="direct">Direct</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="search-icon"><i class="fas fa-search"></i></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu géopolitique -->
+    <div class="geo-nav">
+        <a class="geo-link active" data-page="benin">Bénin</a>
+        <a class="geo-link" data-page="afrique">Afrique</a>
+        <a class="geo-link" data-page="europe">Europe</a>
+        <a class="geo-link" data-page="amerique">Amérique</a>
+        <a class="geo-link" data-page="asie">Asie</a>
+        <a class="geo-link" data-page="moyen-orient">Moyen-Orient</a>
+    </div>
+
+    <!-- Hero live (fixe) -->
+    <section class="hero-live fade-in">
+        <div class="live-container">
+            <div class="live-player">
+                <video id="liveVideo" autoplay loop muted playsinline poster="https://via.placeholder.com/800x400/FF00FF/ffffff?text=Direct+CANAL+COM" style="width:100%; height:500px; object-fit:cover; border-radius:16px; border:2px solid var(--fuchsia);">
+                <source src="images/seq1.mp4" type="video/mp4">
+                
+            </video>
+            <!-- Bouton pour activer le son -->
+            <button id="unmuteBtn" style="position:absolute; bottom:20px; right:20px; background:var(--fuchsia); color:white; border:none; border-radius:50px; padding:10px 20px; cursor:pointer; display:flex; align-items:center; gap:10px; font-weight:600; box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:10; transition: var(--transition);">
+                <i class="fas fa-volume-mute"></i> Activer le son
+            </button>
+            </div>
+            <div class="live-info">
+                <h2>Le direct <span>CANAL COM TV</span></h2>
+                <p>Suivez en continu toute l'actualité béninoise et africaine. Journal télévisé, débats, reportages exclusifs.</p>
+                <div class="live-now">
+                    <span class="live-dot"></span>
+                    <span>En direct - Journal de 20h</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenu dynamique -->
+    <div id="dynamic-content"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>CANAL COM TV</h4>
+                <p>Le premier média d'information béninoise. 24h/24, 7j/7.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Rubriques</h4>
+                <ul>
+                    <li><a class="footer-link" data-page="benin">Bénin</a></li>
+                    <li><a class="footer-link" data-page="afrique">Afrique</a></li>
+                    <li><a class="footer-link" data-page="europe">Europe</a></li>
+                    <li><a class="footer-link" data-page="amerique">Amérique</a></li>
+                    <li><a class="footer-link" data-page="asie">Asie</a></li>
+                    <li><a class="footer-link" data-page="moyen-orient">Moyen-Orient</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Programmes</h4>
+                <ul>
+                    <li><a class="footer-link" data-page="culture">Culture</a></li>
+                    <li><a class="footer-link" data-page="sport">Sport</a></li>
+                    <li><a class="footer-link" data-page="emissions">Émissions</a></li>
+                    <li><a class="footer-link" data-page="direct">Direct</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Cotonou, Bénin</li>
+                    <li><i class="fas fa-phone"></i> +229 01 23 45 67</li>
+                    <li><i class="fas fa-envelope"></i> contact@canalcom.tv</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 CANAL COM TV - Tous droits réservés. Média béninois d'information.
+        </div>
+    </footer>
+
+    <script>
+        // Gestionnaire de pages
+        const contentDiv = document.getElementById('dynamic-content');
+        
+        // Définition des contenus pour chaque page
+        const pages = {
+            accueil: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">À la une au Bénin</h2>
+                        <a href="#" class="section-link">Voir tout <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('images/i1.jpeg')">
+                                <span class="card-category">Politique</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 5 mars 2026</div>
+                                <h3 class="card-title">Nouveau projet d'infrastructure à Cotonou</h3>
+                                <p class="card-excerpt">Le gouvernement annonce un investissement majeur pour moderniser le port autonome de Cotonou.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('images/trainbenin.jpg')">
+                                <span class="card-category">Développement</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 4 mars 2026</div>
+                                <h3 class="card-title">Pahou : le projet Blueline avance</h3>
+                                <p class="card-excerpt">Les travaux de la gare de Pahou avancent rapidement pour le futur train express.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('images/ouid.jpg')">
+                                <span class="card-category">Culture</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 3 mars 2026</div>
+                                <h3 class="card-title">Festival international de Ouidah</h3>
+                                <p class="card-excerpt">La 15e édition du festival des arts et cultures attire des artistes du monde entier.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="fade-in visible" style="background: var(--gris-clair);">
+                    <div class="section-header">
+                        <h2 class="section-title">Culture & divertissement</h2>
+                        <a href="#" class="section-link">Toutes les émissions <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="thematic-grid">
+                        <div class="thematic-card"><i class="fas fa-music"></i><span>Musique</span></div>
+                        <div class="thematic-card"><i class="fas fa-film"></i><span>Cinéma</span></div>
+                        <div class="thematic-card"><i class="fas fa-palette"></i><span>Arts</span></div>
+                        <div class="thematic-card"><i class="fas fa-book"></i><span>Littérature</span></div>
+                    </div>
+                </section>
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Actualités africaines</h2>
+                        <a href="#" class="section-link">Toute l'Afrique <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('images/abe.jpg')">
+                                <span class="card-category">Politique</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 5 mars 2026</div>
+                                <h3 class="card-title">Sommet de l'Union Africaine à Addis-Abeba</h3>
+                                <p class="card-excerpt">Les chefs d'État débattent de l'intégration économique du continent.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('images/cot.png')">
+                                <span class="card-category">Économie</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 4 mars 2026</div>
+                                <h3 class="card-title">Côte d'Ivoire : nouvelle zone industrielle</h3>
+                                <p class="card-excerpt">Abidjan lance un projet de 200 hectares pour attirer les investisseurs.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('images/dakar.jpeg')">
+                                <span class="card-category">Culture</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 3 mars 2026</div>
+                                <h3 class="card-title">Dakar accueille la Biennale de l'Art Africain</h3>
+                                <p class="card-excerpt">Plus de 50 pays participants pour cette édition 2026.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            actualites: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Toutes les actualités</h2>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=News1')">
+                                <span class="card-category">International</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 5 mars 2026</div>
+                                <h3 class="card-title">Actualité mondiale : les grands titres</h3>
+                                <p class="card-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- Plus de cartes... -->
+                    </div>
+                </section>
+            `,
+            culture: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Culture</h2>
+                    </div>
+                    <div class="thematic-grid">
+                        <div class="thematic-card"><i class="fas fa-music"></i><span>Musique</span></div>
+                        <div class="thematic-card"><i class="fas fa-film"></i><span>Cinéma</span></div>
+                        <div class="thematic-card"><i class="fas fa-palette"></i><span>Arts</span></div>
+                        <div class="thematic-card"><i class="fas fa-book"></i><span>Littérature</span></div>
+                    </div>
+                </section>
+            `,
+            sport: `
+                <section class="fade-in visible" style="background: var(--noir); color: var(--blanc);">
+                    <div class="section-header">
+                        <h2 class="section-title" style="border-left-color: var(--fuchsia); color: var(--blanc);">Sport</h2>
+                    </div>
+                    <div class="sport-grid">
+                        <div class="sport-card">
+                            <img src="images/can.jpg" alt="Football">
+                            <div class="sport-overlay"><h3>Football</h3><p>Éliminatoires CAN 2027</p></div>
+                        </div>
+                        <div class="sport-card">
+                            <img src="images/basket.jpg" alt="Basketball">
+                            <div class="sport-overlay"><h3>Basketball</h3><p>Championnat national</p></div>
+                        </div>
+                        <div class="sport-card">
+                            <img src="images/meet.jpg" alt="Athlétisme">
+                            <div class="sport-overlay"><h3>Athlétisme</h3><p>Meeting international</p></div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            emissions: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Nos émissions</h2>
+                    </div>
+                    <div class="emissions-grid">
+                        <div class="emission-card">
+                            <div class="emission-img"></div>
+                            <div class="emission-info"><h4>Le Grand Débat</h4><p>L'actualité politique décryptée</p></div>
+                        </div>
+                        <div class="emission-card">
+                            <div class="emission-img"></div>
+                            <div class="emission-info"><h4>Culture Club</h4><p>Tendances artistiques</p></div>
+                        </div>
+                        <div class="emission-card">
+                            <div class="emission-img"></div>
+                            <div class="emission-info"><h4>Afrique Économie</h4><p>Le magazine de la finance</p></div>
+                        </div>
+                        <div class="emission-card">
+                            <div class="emission-img"></div>
+                            <div class="emission-info"><h4>Sport Dimanche</h4><p>Le grand rendez-vous sportif</p></div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            direct: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Direct</h2>
+                    </div>
+                    <div style="background: var(--noir); color:white; padding:2rem; border-radius:16px; text-align:center;">
+                        <p style="font-size:1.5rem;">📺 Vous êtes déjà en direct sur notre player ci-dessus</p>
+                        <p>Retrouvez tous nos directs et replays ici.</p>
+                    </div>
+                </section>
+            `,
+            benin: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Actualités du Bénin</h2>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=Cotonou')">
+                                <span class="card-category">Politique</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 5 mars 2026</div>
+                                <h3 class="card-title">Nouveau projet d'infrastructure à Cotonou</h3>
+                                <p class="card-excerpt">Le gouvernement annonce un investissement majeur pour moderniser le port autonome de Cotonou.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=Pahou')">
+                                <span class="card-category">Développement</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 4 mars 2026</div>
+                                <h3 class="card-title">Pahou : le projet Blueline avance</h3>
+                                <p class="card-excerpt">Les travaux de la gare de Pahou avancent rapidement pour le futur train express.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=Ouidah')">
+                                <span class="card-category">Culture</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 3 mars 2026</div>
+                                <h3 class="card-title">Festival international de Ouidah</h3>
+                                <p class="card-excerpt">La 15e édition du festival des arts et cultures attire des artistes du monde entier.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            afrique: `
+                <section class="fade-in visible">
+                    <div class="section-header">
+                        <h2 class="section-title">Actualités africaines</h2>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=UA')">
+                                <span class="card-category">Politique</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 5 mars 2026</div>
+                                <h3 class="card-title">Sommet de l'Union Africaine à Addis-Abeba</h3>
+                                <p class="card-excerpt">Les chefs d'État débattent de l'intégration économique du continent.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=Abidjan')">
+                                <span class="card-category">Économie</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 4 mars 2026</div>
+                                <h3 class="card-title">Côte d'Ivoire : nouvelle zone industrielle</h3>
+                                <p class="card-excerpt">Abidjan lance un projet de 200 hectares pour attirer les investisseurs.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-img" style="background-image: url('https://via.placeholder.com/400x200/FF00FF/ffffff?text=Dakar')">
+                                <span class="card-category">Culture</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-date"><i class="far fa-clock"></i> 3 mars 2026</div>
+                                <h3 class="card-title">Dakar accueille la Biennale de l'Art Africain</h3>
+                                <p class="card-excerpt">Plus de 50 pays participants pour cette édition 2026.</p>
+                                <a href="#" class="section-link">Lire plus <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `,
+            europe: `<section class="fade-in visible"><h2 class="section-title">Europe</h2><p>Actualités européennes à venir...</p></section>`,
+            amerique: `<section class="fade-in visible"><h2 class="section-title">Amérique</h2><p>Actualités américaines à venir...</p></section>`,
+            asie: `<section class="fade-in visible"><h2 class="section-title">Asie</h2><p>Actualités asiatiques à venir...</p></section>`,
+            'moyen-orient': `<section class="fade-in visible"><h2 class="section-title">Moyen-Orient</h2><p>Actualités du Moyen-Orient à venir...</p></section>`
+        };
+
+        // Fonction pour changer de page
+        function loadPage(pageId) {
+            // Met à jour le contenu
+            contentDiv.innerHTML = pages[pageId] || pages.accueil;
+            
+            // Met à jour la classe active sur tous les menus
+            document.querySelectorAll('.menu-link, .geo-link, .footer-link, .logo, .live-badge').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Active le lien correspondant dans le menu principal
+            document.querySelectorAll(`.menu-link[data-page="${pageId}"]`).forEach(link => link.classList.add('active'));
+            // Active le lien correspondant dans le menu géo
+            document.querySelectorAll(`.geo-link[data-page="${pageId}"]`).forEach(link => link.classList.add('active'));
+            // Active le lien dans le footer
+            document.querySelectorAll(`.footer-link[data-page="${pageId}"]`).forEach(link => link.classList.add('active'));
+            // Active le logo si page accueil
+            if (pageId === 'accueil') {
+                document.querySelector('.logo').classList.add('active');
+            }
+            // Active le live-badge si page direct
+            if (pageId === 'direct') {
+                document.querySelector('.live-badge').classList.add('active');
+            }
+            
+            // Scroll en douceur vers le contenu
+            contentDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Gestionnaire d'événements pour tous les liens
+        function setupNavigation() {
+            // Liens du menu principal
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.dataset.page;
+                    loadPage(page);
+                });
+            });
+            
+            // Liens du menu géopolitique
+            document.querySelectorAll('.geo-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.dataset.page;
+                    loadPage(page);
+                });
+            });
+            
+            // Liens du footer
+            document.querySelectorAll('.footer-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.dataset.page;
+                    loadPage(page);
+                });
+            });
+            
+            // Logo
+            document.querySelector('.logo').addEventListener('click', () => {
+                loadPage('accueil');
+            });
+            
+            // Live badge
+            document.querySelector('.live-badge').addEventListener('click', () => {
+                loadPage('direct');
+            });
+        }
+
+        // Initialisation : charger la page d'accueil
+        window.addEventListener('load', () => {
+            loadPage('accueil');
+            setupNavigation();
+        });
+
+        // Menu mobile
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Animation au scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        // Gestion du son pour la vidéo en direct
+const video = document.getElementById('liveVideo');
+const unmuteBtn = document.getElementById('unmuteBtn');
+if (video && unmuteBtn) {
+    unmuteBtn.addEventListener('click', () => {
+        if (video.muted) {
+            video.muted = false;
+            unmuteBtn.innerHTML = '<i class="fas fa-volume-up"></i> Couper le son';
+        } else {
+            video.muted = true;
+            unmuteBtn.innerHTML = '<i class="fas fa-volume-mute"></i> Activer le son';
+        }
+    });
+}
+    </script>
+</body>
+</html>
